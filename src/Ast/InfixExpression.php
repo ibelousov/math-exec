@@ -1,7 +1,7 @@
 <?php
 
 
-namespace IvanBelousov\MathExec\Ast;
+namespace Ibelousov\MathExec\Ast;
 
 
 class InfixExpression extends AbstractExpression

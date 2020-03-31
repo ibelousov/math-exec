@@ -1,7 +1,7 @@
 <?php
 
 
-namespace IvanBelousov\MathExec\Evaluator;
+namespace Ibelousov\MathExec\Evaluator;
 
 
 class NumberObj implements ObjInterface

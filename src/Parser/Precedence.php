@@ -1,9 +1,9 @@
 <?php
 
-namespace IvanBelousov\MathExec\Parser;
+namespace Ibelousov\MathExec\Parser;
 
-use IvanBelousov\MathExec\Evaluator\ObjType;
-use IvanBelousov\MathExec\Lexer\OperatorType;
+use Ibelousov\MathExec\Evaluator\ObjType;
+use Ibelousov\MathExec\Lexer\OperatorType;
 
 class Precedence
 {

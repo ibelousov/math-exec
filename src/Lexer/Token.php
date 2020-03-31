@@ -1,6 +1,6 @@
 <?php
 
-namespace IvanBelousov\MathExec\Lexer;
+namespace Ibelousov\MathExec\Lexer;
 
 
 class Token {

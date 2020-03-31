@@ -1,9 +1,9 @@
 <?php
 
-namespace IvanBelousov\MathExec\Parser;
+namespace Ibelousov\MathExec\Parser;
 
-use IvanBelousov\MathExec\Lexer\{Lexer, OperatorType};
-use IvanBelousov\MathExec\Ast\{AbstractExpression,
+use Ibelousov\MathExec\Lexer\{Lexer, OperatorType};
+use Ibelousov\MathExec\Ast\{AbstractExpression,
     Boolean,
     CallExpression,
     ExpressionStatement,
@@ -69,7 +69,7 @@ class Parser
         $this->registerInfix(OperatorType::POWER, function($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::EQ, function($expression){
+        $this->registerInfix(OperatorType::EQ, function($expression) {
             return $this->parseInfixExpression($expression);
         });
         $this->registerInfix(OperatorType::NOT_EQ, function($expression){
@@ -115,12 +115,12 @@ class Parser
         return $program;
     }
 
-    public function parseStatement(): ?ExpressionStatement
+    public function parseStatement(): ExpressionStatement
     {
         return $this->parseExpressionStatement();
     }
 
-    public function parseExpressionStatement(): ?ExpressionStatement
+    public function parseExpressionStatement(): ExpressionStatement
     {
         $stmt = new ExpressionStatement($this->curToken);
 
@@ -129,7 +129,7 @@ class Parser
         return $stmt;
     }
 
-    public function parseExpression($precedence): ?AbstractExpression
+    public function parseExpression($precedence): AbstractExpression
     {
         $prefix = array_key_exists($this->curToken->tokenType, $this->prefixParseFns);
 
@@ -161,7 +161,7 @@ class Parser
         return $leftExp;
     }
 
-    public function parsePrefixExpression(): ?AbstractExpression
+    public function parsePrefixExpression(): AbstractExpression
     {
         $expression = new PrefixExpression($this->curToken, 
             $this->curToken->literal);
@@ -213,24 +213,7 @@ class Parser
         return $list;
     }
 
-//    public function parseFunctionLiteral(): ?AbstractExpression
-//    {
-//        $lit = new FunctionLiteral($this->curToken);
-//
-//        if(!$this->expectPeek(LPAREN))
-//            return null;
-//
-//        $lit->parameters = $this->parseFunctionParameters();
-//
-//        if(!$this->expectPeek(LBRACE))
-//            return null;
-//
-//        $lit->body = $this->parseBlockStatement();
-//
-//        return $lit;
-//    }
-
-    public function parseIdentifier(): ?AbstractExpression
+    public function parseIdentifier(): AbstractExpression
     {
         return new Identifier($this->curToken, $this->curToken->literal);
     }
@@ -270,7 +253,7 @@ class Parser
         return $args;
     }
 
-    public function parseNumberLiteral(): ?AbstractExpression
+    public function parseNumberLiteral(): AbstractExpression
     {
         $lit = new NumberLiteral($this->curToken);
 
@@ -285,7 +268,7 @@ class Parser
         return $lit;
     }
 
-    public function parseGroupedExpression(): ?AbstractExpression
+    public function parseGroupedExpression(): AbstractExpression
     {
         $this->nextToken();
 

@@ -1,5 +1,5 @@
 {
-    "name": "ivanbelousov/mathexec",
+    "name": "ibelousov/math-exec",
     "description": "Package for evaluating math expressions using variable precision numbers",
     "keywords": ["math", "expressions", "parser"],
     "license": "MIT",
@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "IvanBelousov\\MathExec\\": "src/"
+            "Ibelousov\\MathExec\\": "src/"
         }
     }
 }

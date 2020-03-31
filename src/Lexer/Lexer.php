@@ -1,6 +1,8 @@
 <?php
 
-namespace IvanBelousov\MathExec\Lexer;
+namespace Ibelousov\MathExec\Lexer;
+
+use Ibelousov\MathExec\Exceptions\WrongTokenException;
 
 class Lexer
 {
@@ -18,19 +20,7 @@ class Lexer
         $this->readChar();
     }
 
-    public function readChar()
-    {
-        if($this->readPosition >= strlen($this->input)) {
-            $this->ch = null;
-        } else { 
-            $this->ch = substr($this->input, $this->readPosition, 1);
-        }
-
-        $this->position = $this->readPosition;
-        $this->readPosition++;
-    }
-
-    public function nextToken(): Token 
+    public function nextToken(): Token
     {
         $token = null;
 
@@ -45,7 +35,7 @@ class Lexer
                     $literal = $ch . $this->ch;
                     $token = new Token(OperatorType::EQ, $literal);
                 } else {
-                    $token = new Token(OperatorType::ASSIGN, $this->ch);
+                    throw new WrongTokenException("After = should be " . $this->peekChar());
                 }
                 break;
             case '+': $token = new Token(OperatorType::PLUS, $this->ch); break;
@@ -73,8 +63,8 @@ class Lexer
 
                     break;
             case '\\': $token = new Token(OperatorType::ROOTS, $this->ch); break;
-            case '%': $token = new Token(OperatorType::MODUL, $this->ch); break;
-            case '*': $token = new Token(OperatorType::ASTERISK, $this->ch); break;
+            case '%':  $token = new Token(OperatorType::MODUL, $this->ch); break;
+            case '*':  $token = new Token(OperatorType::ASTERISK, $this->ch); break;
             case '<': 
                 if($this->peekChar() == '=') {
                     $ch = $this->ch;
@@ -106,9 +96,8 @@ class Lexer
                     return new Token(OperatorType::IDENT, $this->readIdentifier());
                 } else if($this->isDigit($this->ch)){
                     return new Token(OperatorType::NUMBER, $this->readNumber());
-                } else {
-                    $token = new Token(OperatorType::ILLEGAL, $this->ch);
                 }
+                throw new WrongTokenException();
         }
 
         $this->readChar();
@@ -116,7 +105,19 @@ class Lexer
         return $token;
     }
 
-    public function readIdentifier(): string
+    protected function readChar()
+    {
+        if($this->readPosition >= strlen($this->input)) {
+            $this->ch = null;
+        } else {
+            $this->ch = $this->input[$this->readPosition];
+        }
+
+        $this->position = $this->readPosition;
+        $this->readPosition++;
+    }
+
+    protected function readIdentifier(): string
     {
         $position = $this->position;
 
@@ -127,7 +128,7 @@ class Lexer
         return substr($this->input, $position, $this->position - $position);
     }
 
-    public function readNumber(): string 
+    protected function readNumber(): string
     {
         $position = $this->position;
 
@@ -136,50 +137,36 @@ class Lexer
 
             $this->readChar();
             
-            if($alreadyPoint)
-                break;
+            if($alreadyPoint) break;
         }
 
-        while($this->isDigit($this->ch)) {
-            $this->readChar();
-        }
+        while($this->isDigit($this->ch)) $this->readChar();
 
         return substr($this->input, $position, $this->position - $position);
     }
 
-    public function readString(): string
+    protected function isLetter($ch)
     {
-        $position = $this->position+1;
-
-        do {
-            $this->readChar();
-        } while($this->ch != "\"" && $this->ch !== 0);
-
-        return substr($this->input, $position,  $this->position - $position);
+        return ctype_alpha($ch);
     }
 
-    private function isLetter($ch)
-    {
-        return preg_match('/[А-Яа-яЁёa-zA-Z]/u', $ch);
-    }
-
-    private function isDigit($ch)
+    protected function isDigit($ch)
     {
         return ctype_digit($ch);
     }
 
-    private function eatWhitespace()
+    protected function eatWhitespace()
     {
         while(ctype_space($this->ch))
             $this->readChar();
     }
 
-    private function peekChar()
+    protected function peekChar()
     {
         if($this->position >= strlen($this->input)) {
             return 0;
         } 
 
-        return substr($this->input, $this->readPosition, 1);
+        return $this->input[$this->readPosition];
     }
 }

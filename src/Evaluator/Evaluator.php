@@ -2,8 +2,8 @@
 
 namespace IvanBelousov\MathExec\Evaluator;
 
-use IvanBelousov\MathExec\Parser\Parser;
-use IvanBelousov\MathExec\Ast\{NodeInterface,
+use Ibelousov\MathExec\Parser\Parser;
+use Ibelousov\MathExec\Ast\{NodeInterface,
     Program,
     ExpressionStatement,
     NumberLiteral,
@@ -12,7 +12,7 @@ use IvanBelousov\MathExec\Ast\{NodeInterface,
     CallExpression,
     Identifier,
     InfixExpression};
-use IvanBelousov\MathExec\Lexer\OperatorType;
+use Ibelousov\MathExec\Lexer\OperatorType;
 
 class Evaluator
 {
@@ -132,9 +132,6 @@ class Evaluator
         foreach($program->statements as $statement) {
             $result = $this->evalObj($statement);
 
-//            if($result instanceof ReturnValue)
-//                return $result->returnValue->value;
-
             if($result instanceof ErrorObj)
                 return $result;
         }
@@ -148,8 +145,9 @@ class Evaluator
             case '!':  return $this->evalBangOperatorExpression($right);
             case '-':  return $this->evalMinusPrefixOperatorExpression($right);
             case '\\': return $this->evaluateSqr($right);
-            default:   return $this->newError("unknown operator: ", $operator, $right->Type());
         }
+
+        throw WrongPrefixOperatorException;
     }
 
     public function evalBangOperatorExpression($right): ?ObjInterface
