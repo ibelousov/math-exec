@@ -151,12 +151,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer('^');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::POWER);
         $this->assertEquals($token->literal, '^');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -165,12 +165,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer('<');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::LT);
         $this->assertEquals($token->literal, '<');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -179,12 +179,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer('>');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::GT);
         $this->assertEquals($token->literal, '>');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -193,12 +193,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer('==');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::EQ);
         $this->assertEquals($token->literal, '==');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -207,12 +207,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer('!=');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::NOT_EQ);
         $this->assertEquals($token->literal, '!=');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -221,12 +221,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer('>=');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::GT_OR_EQ);
         $this->assertEquals($token->literal, '>=');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -235,12 +235,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer('<=');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::LT_OR_EQ);
         $this->assertEquals($token->literal, '<=');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -249,12 +249,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer('(');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::LPAREN);
         $this->assertEquals($token->literal, '(');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -263,12 +263,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer(')');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::RPAREN);
         $this->assertEquals($token->literal, ')');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -277,12 +277,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer(',');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::COMMA);
         $this->assertEquals($token->literal, ',');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -291,12 +291,12 @@ class LexerTest extends TestCase
         $lexer = new Lexer('!');
 
         $token = $lexer->nextToken();
+        $eof = $lexer->nextToken();
+
         $this->assertEquals($token->tokenType, OperatorType::BANG);
         $this->assertEquals($token->literal, '!');
-
-        $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::EOF);
-        $this->assertEquals($token->literal, '');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 
     /** @test */
@@ -305,11 +305,14 @@ class LexerTest extends TestCase
         $lexer = new Lexer('!!');
 
         $token = $lexer->nextToken();
-        $this->assertEquals($token->tokenType, OperatorType::BANG);
-        $this->assertEquals($token->literal, '!');
+        $token2= $lexer->nextToken();
+        $eof = $lexer->nextToken();
 
-        $token = $lexer->nextToken();
         $this->assertEquals($token->tokenType, OperatorType::BANG);
         $this->assertEquals($token->literal, '!');
+        $this->assertEquals($token2->tokenType, OperatorType::BANG);
+        $this->assertEquals($token2->literal, '!');
+        $this->assertEquals($eof->tokenType, OperatorType::EOF);
+        $this->assertEquals($eof->literal, '');
     }
 }
