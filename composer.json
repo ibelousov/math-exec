@@ -1,7 +1,7 @@
 {
     "name": "ibelousov/math-exec",
-    "description": "Package for evaluating math expressions using variable precision numbers",
-    "keywords": ["math", "expressions", "parser"],
+    "description": "Evaluate expressions from strings using variable precision numbers",
+    "keywords": ["math", "expressions", "parser", "bcmath", "convenient"],
     "license": "MIT",
     "authors": [
         {
@@ -20,6 +20,11 @@
     "autoload": {
         "psr-4": {
             "Ibelousov\\MathExec\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ibelousov\\MathExec\\Tests\\": "tests"
         }
     }
 }

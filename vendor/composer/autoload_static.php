@@ -30,7 +30,8 @@ class ComposerStaticInit750da39734eabf082db836e552eee104
         ),
         'I' => 
         array (
-            'IvanBelousov\\MathExec\\' => 22,
+            'Ibelousov\\MathExec\\Tests\\' => 25,
+            'Ibelousov\\MathExec\\' => 19,
         ),
         'D' => 
         array (
@@ -58,7 +59,11 @@ class ComposerStaticInit750da39734eabf082db836e552eee104
         array (
             0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
         ),
-        'IvanBelousov\\MathExec\\' => 
+        'Ibelousov\\MathExec\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
+        ),
+        'Ibelousov\\MathExec\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),

@@ -10,7 +10,8 @@ return array(
     'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src/Prophecy'),
-    'IvanBelousov\\MathExec\\' => array($baseDir . '/src'),
+    'Ibelousov\\MathExec\\Tests\\' => array($baseDir . '/tests'),
+    'Ibelousov\\MathExec\\' => array($baseDir . '/src'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
 );

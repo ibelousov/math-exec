@@ -42,7 +42,7 @@ class Lexer
             case '-': $token = new Token(OperatorType::MINUS, $this->ch); break;
             case '^': $token = new Token(OperatorType::POWER, $this->ch); break;
             case '!': 
-                if($this->peekChar() == '=') {
+                if($this->peekChar() === '=') {
                     $ch = $this->ch;
                     $this->readChar();
                     $literal = $ch . $this->ch;
@@ -51,8 +51,8 @@ class Lexer
                     $token = new Token(OperatorType::BANG, $this->ch);
                 }
                 break;
-            case '/': 
-                    if($this->peekChar() == '/') {
+            case '/':
+                    if($this->peekChar() === '/') {
                         $ch = $this->ch;
                         $this->readChar();
                         $literal = $ch . $this->ch;
@@ -66,7 +66,7 @@ class Lexer
             case '%':  $token = new Token(OperatorType::MODUL, $this->ch); break;
             case '*':  $token = new Token(OperatorType::ASTERISK, $this->ch); break;
             case '<': 
-                if($this->peekChar() == '=') {
+                if($this->peekChar() === '=') {
                     $ch = $this->ch;
                     $this->readChar();
                     $literal = $ch . $this->ch;
@@ -76,7 +76,7 @@ class Lexer
                 }
                 break;
             case '>': 
-                if($this->peekChar() == '=') {
+                if($this->peekChar() === '=') {
                     $ch = $this->ch;
                     $this->readChar();
                     $literal = $ch . $this->ch;
@@ -163,9 +163,9 @@ class Lexer
 
     protected function peekChar()
     {
-        if($this->position >= strlen($this->input)) {
+        if($this->readPosition >= strlen($this->input)) {
             return 0;
-        } 
+        }
 
         return $this->input[$this->readPosition];
     }
