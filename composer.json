@@ -25,6 +25,7 @@
     "autoload-dev": {
         "psr-4": {
             "Ibelousov\\MathExec\\Tests\\": "tests"
-        }
+        },
+        "files": ["src/helpers.php"]
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Ibelousov\MathExec\Parser;
 
+use Ibelousov\MathExec\Exceptions\WrongPrefixOperatorException;
 use Ibelousov\MathExec\Lexer\{Lexer, OperatorType};
 use Ibelousov\MathExec\Ast\{AbstractExpression,
     Boolean,
@@ -134,9 +135,7 @@ class Parser
         $prefix = array_key_exists($this->curToken->tokenType, $this->prefixParseFns);
 
         if(!$prefix) {
-            $this->noPrefixParseFnError($this->curToken->tokenType);
-
-            return null;
+            throw new WrongPrefixOperatorException($this->curToken->tokenType);
         }
 
         $leftExp = $this->prefixParseFns[$this->curToken->tokenType]();

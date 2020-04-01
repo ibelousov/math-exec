@@ -2,22 +2,33 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use IvanBelousov\MathExec\Evaluator\Evaluator;
-use IvanBelousov\MathExec\Lexer\Lexer;
-use IvanBelousov\MathExec\Parser\Parser;
-
 while( true ) {
 
     echo ">> ";
 
-    // Read user choice
+    // Read input
     $line = trim( fgets(STDIN) );
 
-    $a = new IvanBelousov\MathExec\Lexer\Lexer($line);
-    $b = new IvanBelousov\MathExec\Parser\Parser($a);
-    $c = new IvanBelousov\MathExec\Evaluator\Evaluator($b);
+    $time = microtime(true);
 
-    echo $c->exec();
+    try {
+        $result = math_exec($line, $argv[1] ?? 40);
+    } catch (Ibelousov\MathExec\Exceptions\WrongTokenException $exception) {
+        echo "Lexing error: Wrong token\n";
+
+        continue;
+    } catch (Ibelousov\MathExec\Exceptions\WrongPrefixOperatorException $exception) {
+        echo "Parsing error: Wrong prefix operator\n";
+
+        continue;
+    }
+
+    if(is_bool($result))
+        echo $result ? 'true' : 'false';
+    else
+        echo $result;
+
+    echo "\nExecuted in " . (microtime(true) - $time) . " s.";
 
     echo "\n";
 }
