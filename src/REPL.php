@@ -9,6 +9,9 @@ while( true ) {
     // Read input
     $line = trim( fgets(STDIN) );
 
+    if(strtolower(trim($line)) == 'exit')
+        break;
+
     $time = microtime(true);
 
     try {
@@ -28,7 +31,9 @@ while( true ) {
     else
         echo $result;
 
-    echo "\nExecuted in " . (microtime(true) - $time) . " s.";
+    $seconds = microtime(true) - $time;
+
+    echo "\nExecuted in {$seconds}s.";
 
     echo "\n";
 }

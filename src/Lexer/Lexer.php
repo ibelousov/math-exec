@@ -2,6 +2,7 @@
 
 namespace Ibelousov\MathExec\Lexer;
 
+use Ibelousov\MathExec\Exceptions\UnknownNumberFormatException;
 use Ibelousov\MathExec\Exceptions\WrongTokenException;
 
 class Lexer
@@ -142,7 +143,30 @@ class Lexer
 
         while($this->isDigit($this->ch)) $this->readChar();
 
-        return substr($this->input, $position, $this->position - $position);
+        $number = substr($this->input, $position, $this->position - $position);
+
+        if($this->ch == 'E') {
+
+            if(!$this->peekChar() == '-' || !$this->peekChar() == '+')
+                throw new UnknownNumberFormatException();
+
+            $this->readChar();
+            $sign = $this->ch;
+            $this->readChar();
+            $positionExpo = $this->position;
+
+            while($this->isDigit($this->ch))
+                $this->readChar();
+
+            $power = substr($this->input, $positionExpo, $this->position - $positionExpo);
+
+            if($sign == '+')
+                $number = bcmul($number, bcpow('10', $power), 64);
+            else
+                $number = bcdiv($number, bcpow('10', $power), 64);
+        }
+
+        return $number;
     }
 
     protected function isLetter($ch)
