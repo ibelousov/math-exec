@@ -43,16 +43,16 @@ class BuiltinCollection
     {
         $this->builtIn = [
             'floor' => new BuiltinFunctionObj(function(...$args) {
-                if(strpos('.', $args[0][0]->value))
+                if(strpos($args[0][0]->value, '.'))
                     return new NumberObj(bcsub($args[0][0]->value, '0.5', 0));
 
                 return new NumberObj(bcsub($args[0][0]->value, '0', 0));
             }),
             'ceil' => new BuiltinFunctionObj(function(...$args) {
-                if(strpos('.', $args[0][0]->value))
-                    return new NumberObj(bcadd($args[0][0]->value, '0.5', 0));
-
-                return new NumberObj(bcsub($args[0][0]->value, '0', 0));
+                if(strpos($args[0][0]->value, '.') !== false) {
+                    return new NumberObj(bcadd($args[0][0]->value, '1.0', 0));
+                }
+                return new NumberObj(bcadd($args[0][0]->value, '0', 0));
             }),
             'format' => new BuiltinFunctionObj(function(...$args) {
                 return new NumberObj(bcmul($args[0][0]->value, 1, $args[0][1]->value));

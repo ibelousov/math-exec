@@ -76,9 +76,10 @@ math_exec("4 ^ 64 <= 4 ^ 64"); // "1"
 math_exec("4 == 4"); // "1"
 math_exec("4 != 4"); // "0"
 
-### Add functions you could add functions like so
+### Functions
 
-math_exec("floor(3.1415)") // 
+math_exec("floor(3.1415)") // 3
+math_exec("ceil(3.1415)") 
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

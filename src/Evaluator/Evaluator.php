@@ -62,9 +62,6 @@ class Evaluator
         if($node instanceof PrefixExpression) {
             $right = $this->EvalObj($node->right);
             
-            if(self::isError($right)) 
-                return $right;
-            
             return $this->EvalPrefixExpression($node->operator, $right);
         }
 
@@ -72,11 +69,9 @@ class Evaluator
 
             $function = $this->EvalObj($node->function);
 
-            if($this->isError($function)) return $function;
-
             $args = $this->evalExpressions($node->arguments);
             
-            if(count($args) == 1 && $this->isError($args[0])) {
+            if(count($args) == 1) {
                 return $args[0];
             }
 
@@ -88,14 +83,8 @@ class Evaluator
 
         if($node instanceof InfixExpression) {
             $left = $this->evalObj($node->left);
-            if($this->isError($left)) {
-                return $left;
-            }
-            
+
             $right = $this->evalObj($node->right);
-            if($this->isError($right)) {
-                return $right;
-            }
 
             return $this->evalInfixExpression($node->operator, $left, $right);
         }
@@ -168,7 +157,7 @@ class Evaluator
 
     public function evalMinusPrefixOperatorExpression($right): ObjInterface
     {
-        if($right->Type() != ObjType::INTEGER_OBJ)
+        if($right->Type() != ObjType::NUMBER_OBJ)
             throw new UnknownOperatorException($right->Type());
 
         return new NumberObj(bcmul($right->value, '-1', $this->precision));
@@ -276,13 +265,5 @@ class Evaluator
     public function evaluateMod($leftVal, $rightVal)
     {
         return bcmod($leftVal, $rightVal, $this->precision);
-    }
-
-    public function isError($obj): bool
-    {
-        if($obj != null)
-            return $obj->Type() == ObjType::ERROR_OBJ;
-
-        return false;
     }
 }
