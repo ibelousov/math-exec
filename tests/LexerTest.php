@@ -2,6 +2,7 @@
 
 namespace Ibelousov\MathExec\Tests;
 
+use Ibelousov\MathExec\Exceptions\UnknownNumberFormatException;
 use Ibelousov\MathExec\Lexer\Lexer;
 use Ibelousov\MathExec\Lexer\OperatorType;
 use PHPUnit\Framework\TestCase;
@@ -315,4 +316,15 @@ class LexerTest extends TestCase
         $this->assertEquals($eof->tokenType, OperatorType::EOF);
         $this->assertEquals($eof->literal, '');
     }
+
+    /** @test */
+    public function it_throws_exception_on_wrong_number_format()
+    {
+        $this->expectException(UnknownNumberFormatException::class);
+
+        $lexer = new Lexer('4E-+4');
+        $lexer->nextToken();
+    }
+
+
 }

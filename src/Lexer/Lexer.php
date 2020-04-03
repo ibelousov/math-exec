@@ -152,6 +152,10 @@ class Lexer
 
             $this->readChar();
             $sign = $this->ch;
+
+            if(!is_numeric($this->peekChar()))
+                throw new UnknownNumberFormatException();
+
             $this->readChar();
             $positionExpo = $this->position;
 

@@ -26,10 +26,7 @@ while( true ) {
         continue;
     }
 
-    if(is_bool($result))
-        echo $result ? 'true' : 'false';
-    else
-        echo $result;
+    echo $result;
 
     $seconds = microtime(true) - $time;
 

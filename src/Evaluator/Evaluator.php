@@ -2,12 +2,15 @@
 
 namespace Ibelousov\MathExec\Evaluator;
 
+use Ibelousov\MathExec\Exceptions\EvaluatingPowerException;
 use Ibelousov\MathExec\Exceptions\IdentifierNotFoundException;
+use Ibelousov\MathExec\Exceptions\InvalidNodeException;
 use Ibelousov\MathExec\Exceptions\NotAFunctionException;
 use Ibelousov\MathExec\Exceptions\TypeMismatchException;
 use Ibelousov\MathExec\Exceptions\UnknownOperatorException;
 use Ibelousov\MathExec\Exceptions\WrongArgumentNumberException;
 use Ibelousov\MathExec\Exceptions\WrongPrefixOperatorException;
+use Ibelousov\MathExec\Lexer\Lexer;
 use Ibelousov\MathExec\Parser\Parser;
 use Ibelousov\MathExec\Ast\{NodeInterface,
     Program,
@@ -24,22 +27,22 @@ class Evaluator
 {
     protected $trueObj;
     protected $falseObj;
-    protected $nullObj;
     protected $builtIns;
     protected $precision;
+    protected $program;
 
-    public function __construct(Parser $parser, int $precision)
+    public function __construct(string $input, int $precision = 30)
     {
-        $this->trueObj = new BooleanObj(true);
-        $this->falseObj= new BooleanObj(false);
-        $this->builtIns= BuiltinCollection::getInstance();
-        $this->parser  = $parser;
-        $this->precision = $precision;
+        $this->trueObj  = new BooleanObj(true);
+        $this->falseObj = new BooleanObj(false);
+        $this->builtIns = BuiltinCollection::getInstance();
+        $this->program  = (new Parser(new Lexer($input)))->parseProgram();
+        $this->precision= $precision;
     }
 
     public function exec()
     {
-        return $this->evalObj($this->parser->parseProgram());
+        return $this->evalObj($this->program);
     }
 
     public function evalObj(NodeInterface $node): ObjInterface
@@ -97,10 +100,10 @@ class Evaluator
             return $this->evalInfixExpression($node->operator, $left, $right);
         }
 
-        return null;
+        throw new InvalidNodeException();
     }
 
-    public function evalIdentifier($node): ?ObjInterface
+    public function evalIdentifier($node): ObjInterface
     {
         $builtin = $this->builtIns->getBuiltin($node->value);
 
@@ -110,7 +113,7 @@ class Evaluator
         throw new IdentifierNotFoundException($node->value);
     }
 
-    public function applyFunction($function, $args): ?ObjInterface
+    public function applyFunction($function, $args): ObjInterface
     {
         if($function instanceof BuiltinFunctionObj) {
 
@@ -127,19 +130,13 @@ class Evaluator
         $result = [];
 
         foreach($exps as $exp) {
-            $evaluated = $this->evalObj($exp);
-
-            if($this->isError($evaluated)) {
-                throw new WrongArgumentNumberException();
-            }
-
-            $result[] = $evaluated;
+            $result[] = $this->evalObj($exp);
         }
 
         return $result;
     }
 
-    public function evalProgram($program): ?ObjInterface
+    public function evalProgram($program): ObjInterface
     {
         $result = null;
 
@@ -150,7 +147,7 @@ class Evaluator
         return $result;
     }
 
-    public function evalPrefixExpression($operator, $right): ?ObjInterface
+    public function evalPrefixExpression($operator, $right): ObjInterface
     {
         switch ($operator) {
             case '!':  return $this->evalBangOperatorExpression($right);
@@ -177,12 +174,12 @@ class Evaluator
         return new NumberObj(bcmul($right->value, '-1', $this->precision));
     }
 
-    public function evaluateSqr($operand): ?ObjInterface
+    public function evaluateSqr($operand): ObjInterface
     {
         return new NumberObj(bcsqrt($operand->value, $this->precision));
     }
 
-    public function evalInfixExpression($operator, $left, $right): ?ObjInterface
+    public function evalInfixExpression($operator, $left, $right): ObjInterface
     {
         if($left->Type() == ObjType::NUMBER_OBJ && $right->Type() == ObjType::NUMBER_OBJ)
             return $this->evalIntegerInfixExpressioin($operator, $left, $right);
@@ -246,7 +243,7 @@ class Evaluator
     public function evaluatePow($leftVal, $rightVal)
     {
         if(strpos($leftVal, '.') !== false || strpos($rightVal, '.') !== false)
-            throw new Exception("Error processing powering: $leftVal and $rightVal should be whole values", 1);
+            throw new EvaluatingPowerException("Error processing powering: $leftVal and $rightVal should be whole values", 1);
 
         return bcpow($leftVal, $rightVal, $this->precision);
     }
@@ -287,12 +284,5 @@ class Evaluator
             return $obj->Type() == ObjType::ERROR_OBJ;
 
         return false;
-    }
-
-    public function newError($string, ...$a): ErrorObj
-    {
-        if($a) $string .= implode(" ", $a);
-
-        return new ErrorObj($string);
     }
 }

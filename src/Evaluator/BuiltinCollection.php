@@ -4,6 +4,8 @@
 namespace Ibelousov\MathExec\Evaluator;
 
 
+use Ibelousov\MathExec\Exceptions\BuiltinFunctionExistException;
+
 class BuiltinCollection
 {
     protected $builtIn;
@@ -19,9 +21,15 @@ class BuiltinCollection
         return static::$instance;
     }
 
-    public function addBuiltin(string $name, callable $method)
+    public static function addBuiltin(string $name, callable $method)
     {
-        $this->builtIn[$name] = new BuiltinFunctionObj($method);
+        $instance = self::getInstance();
+
+        if(array_key_exists($name, $instance->builtIn)) {
+            throw new BuiltinFunctionExistException;
+        }
+
+        $instance->builtIn[$name] = new BuiltinFunctionObj($method);
     }
 
     public function getBuiltin(string $name)
@@ -35,10 +43,16 @@ class BuiltinCollection
     {
         $this->builtIn = [
             'floor' => new BuiltinFunctionObj(function(...$args) {
-                return new NumberObj(bcsub($args[0][0]->value, '0.5', 0));
+                if(strpos('.', $args[0][0]->value))
+                    return new NumberObj(bcsub($args[0][0]->value, '0.5', 0));
+
+                return new NumberObj(bcsub($args[0][0]->value, '0', 0));
             }),
             'ceil' => new BuiltinFunctionObj(function(...$args) {
-                return new NumberObj(bcadd($args[0][0]->value, '0.5', 0));
+                if(strpos('.', $args[0][0]->value))
+                    return new NumberObj(bcadd($args[0][0]->value, '0.5', 0));
+
+                return new NumberObj(bcsub($args[0][0]->value, '0', 0));
             }),
             'format' => new BuiltinFunctionObj(function(...$args) {
                 return new NumberObj(bcmul($args[0][0]->value, 1, $args[0][1]->value));
