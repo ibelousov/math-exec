@@ -44,25 +44,32 @@ by default it is 40 signs after point
 )
 
     // Multiplication
-    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 * 2"); //  4
+    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 * 2"); 
+    //  "4"
 
     // Division
-    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 / 2"); // 1
+    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 / 2"); 
+    // "1"
 
     // Power
-    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 ^ 3"); // 8 (left and right should be whole numbers)
+    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 ^ 3"); 
+    // "8" (left and right should be whole numbers)
 
     // Modul
-    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("7 % 2"); // 1
+    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("7 % 2"); 
+    // "1"
 
     // Whole division
-    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("3.1415 // 2"); // 1
+    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("3.1415 // 2"); 
+    // "1"
 
     // Associativity
-    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 + 2 * 2");  // 6
+    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 + 2 * 2");  
+    // "6"
 
     // Parenthesis
-    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("(2 + 2) * 2"); // 8
+    \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("(2 + 2) * 2"); 
+    // "8"
 
     // Float to string convertion number formats
     $a = 0.1415E-10;
