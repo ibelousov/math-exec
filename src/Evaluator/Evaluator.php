@@ -33,8 +33,8 @@ class Evaluator
 
     public function __construct(string $input, int $precision = 40)
     {
-        $this->trueObj  = new BooleanObj(true);
-        $this->falseObj = new BooleanObj(false);
+        $this->trueObj  = new BooleanObj('1');
+        $this->falseObj = new BooleanObj('0');
         $this->builtIns = BuiltinCollection::getInstance();
         $this->program  = (new Parser(new Lexer($input)))->parseProgram();
         $this->precision= $precision;
@@ -211,22 +211,22 @@ class Evaluator
         throw new UnknownOperatorException($left->Type() . ' ' . $operator . ' ' . $right->Type());
     }
 
-    public function evaluateLT($leftVal, $rightVal)
+    public function evaluateLT($leftVal, $rightVal): int
     {
-        return bccomp($leftVal, $rightVal, $this->precision) == -1;
+        return (int)(bccomp($leftVal, $rightVal, $this->precision) == -1);
     }
 
-    public function evaluateGT($leftVal, $rightVal)
+    public function evaluateGT($leftVal, $rightVal): int
     {
-        return bccomp($leftVal, $rightVal, $this->precision) == 1;
+        return (int)(bccomp($leftVal, $rightVal, $this->precision) == 1);
     }
 
-    public function evaluateEQ($leftVal, $rightVal)
+    public function evaluateEQ($leftVal, $rightVal): int
     {
-        return bccomp($leftVal, $rightVal, $this->precision) == 0;
+        return (int)(bccomp($leftVal, $rightVal, $this->precision) == 0);
     }
 
-    public function evaluateNEQ($leftVal, $rightVal)
+    public function evaluateNEQ($leftVal, $rightVal): int
     {
         return !$this->evaluateEQ($leftVal, $rightVal);
     }
