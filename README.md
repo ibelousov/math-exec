@@ -1,6 +1,6 @@
 # MathExec
 
-MathExec is php library for parsing math expressions like so: 
+MathExec is php library for parsing and evaluating math expressions like so: 
 
     <?php
         echo \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("5 ^ 2 + 36 / 2 - 1")
