@@ -123,6 +123,9 @@ To compare numbers properly you should set precision properly. In case that show
 you should do this, to properly compare numbers 
 
     \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4/4 == 6/5", 1) 
+    
+## REPL
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
