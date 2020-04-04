@@ -1,6 +1,6 @@
 # MathExec
 
-MathExec is php library for parsing and evaluating math expressions like so: 
+MathExec is a php library for parsing and evaluating math expressions like this: 
 
     <?php
         echo \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("5 ^ 2 + 36 / 2 - 1")
@@ -19,7 +19,7 @@ Use the package manager composer to install it
      \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("\\2"); 
      // "1.1892071150027210667174999705604759152929"
 
-(you could set inner precision, like so:
+(you could set inner precision, like this:
 
     \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("\\2", 1000); 
     
@@ -100,7 +100,7 @@ by default it is 40 signs after point
     \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("format(ceil(3.1415) + floor(3.1415), 2)") 
     // "7.00" 
 
-Also you can add your own functions like so:
+Also you can add your own functions like this:
 
     \Ibelousov\MathExec\Evaluator\BuiltinCollection::addBuiltin('inc', function($args) {
         $number_parts = explode('.', $args[0]->value);
