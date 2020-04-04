@@ -43,31 +43,31 @@ class BuiltinCollection
     private function __construct()
     {
         $this->builtIn = [
-            'floor' => new BuiltinFunctionObj(function(...$args) {
-                $whole_value = bcmul($args[0][0]->value, '1', 0);
+            'floor' => new BuiltinFunctionObj(function($args) {
+                $whole_value = bcmul($args[0]->value, '1', 0);
 
-                switch (bccomp($args[0][0]->value, $whole_value, 2))
+                switch (bccomp($args[0]->value, $whole_value, 2))
                 {
                     case 0: return new NumberObj($whole_value);
                     case -1: return new NumberObj(bcsub($whole_value, '1', 0));
                     case 1: return new NumberObj(bcmul($whole_value, '1', 0));
                 }
             }),
-            'ceil' => new BuiltinFunctionObj(function(...$args) {
-                $whole_value = bcmul($args[0][0]->value, '1', 0);
+            'ceil' => new BuiltinFunctionObj(function($args) {
+                $whole_value = bcmul($args[0]->value, '1', 0);
 
-                switch (bccomp($args[0][0]->value, $whole_value, 2))
+                switch (bccomp($args[0]->value, $whole_value, 2))
                 {
                     case 0: return new NumberObj($whole_value);
                     case -1: return new NumberObj(bcmul($whole_value, '1', 0));
                     case 1: return new NumberObj(bcadd($whole_value, '1', 0));
                 }
             }),
-            'format' => new BuiltinFunctionObj(function(...$args) {
-                if(!isset($args[0][1]))
+            'format' => new BuiltinFunctionObj(function($args) {
+                if(!isset($args[1]))
                     throw new WrongArgumentNumberException();
 
-                return new NumberObj(bcmul($args[0][0]->value, '1.00', $args[0][1]->value));
+                return new NumberObj(bcmul($args[0]->value, '1.00', $args[1]->value));
             })
         ];
     }

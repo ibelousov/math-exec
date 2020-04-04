@@ -31,13 +31,18 @@ class Evaluator
     protected $precision;
     protected $program;
 
-    public function __construct(string $input, int $precision = 30)
+    public function __construct(string $input, int $precision = 40)
     {
         $this->trueObj  = new BooleanObj(true);
         $this->falseObj = new BooleanObj(false);
         $this->builtIns = BuiltinCollection::getInstance();
         $this->program  = (new Parser(new Lexer($input)))->parseProgram();
         $this->precision= $precision;
+    }
+
+    public static function math_exec($expression, $inner_precision = 40)
+    {
+        return (new self($expression, $inner_precision))->exec()->value;
     }
 
     public function exec()
@@ -194,6 +199,7 @@ class Evaluator
             case '/':  return new NumberObj($this->evaluateDiv($leftVal, $rightVal));
             case '//': return new NumberObj($this->evaluateWDiv($leftVal, $rightVal));
             case '%':  return new NumberObj($this->evaluateMod($leftVal, $rightVal));
+
             case '<':  return new BooleanObj($this->evaluateLT($leftVal, $rightVal));
             case '<=': return new BooleanObj($this->evaluateLT($leftVal, $rightVal) || $this->evaluateEQ($leftVal, $rightVal));
             case '>':  return new BooleanObj($this->evaluateGT($leftVal, $rightVal));

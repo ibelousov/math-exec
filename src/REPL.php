@@ -15,7 +15,10 @@ while( true ) {
     $time = microtime(true);
 
     try {
-        $result = isset($argv[1]) ? math_exec($line, $argv[1]) : math_exec($line);
+        if(isset($argv[1]))
+            $result = \Ibelousov\MathExec\Evaluator\Evaluator::math_exec($line, $argv[1]);
+        else
+            $result = \Ibelousov\MathExec\Evaluator\Evaluator::math_exec($line);
     } catch (Exception $exception) {
         echo $exception->getMessage() . "\n";
 
