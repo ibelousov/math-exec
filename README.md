@@ -78,8 +78,11 @@ math_exec("4 != 4"); // "0"
 
 ### Functions
 
-math_exec("floor(3.1415)") // 3
-math_exec("ceil(3.1415)") 
+math_exec("floor(3.1415)") // "3"
+math_exec("ceil(3.1415)") // "4"
+math_exec("format(ceil(3.1415) + floor(3.1415), 2)") // "7.00" 
+
+You can add functions like so:
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

@@ -168,4 +168,76 @@ class EvaluatorTest extends TestCase
 
         (new Evaluator('+2'))->exec();
     }
+
+    /** @test */
+    public function evaluate_builtin_floor_positive_functions()
+    {
+        $given = (new Evaluator('floor(4.5)'))->exec();
+
+        $this->assertEquals('4', $given);
+    }
+
+    /** @test */
+    public function evaluate_builtin_floor_negative_functions()
+    {
+        $given = (new Evaluator('floor(-4.5)'))->exec();
+
+        $this->assertEquals('-5', $given);
+    }
+
+    /** @test */
+    public function evaluate_builtin_floor_whole_positive_functions()
+    {
+        $given = (new Evaluator('floor(4)'))->exec();
+
+        $this->assertEquals('4', $given);
+    }
+
+    /** @test */
+    public function evaluate_builtin_floor_whole_negative_functions()
+    {
+        $given = (new Evaluator('floor(-4)'))->exec();
+
+        $this->assertEquals('-4', $given);
+    }
+
+    /** @test */
+    public function evaluate_builtin_ceil_positive_functions()
+    {
+        $given = (new Evaluator('ceil(4.5)'))->exec();
+
+        $this->assertEquals('5', $given);
+    }
+
+    /** @test */
+    public function evaluate_builtin_ceil_negative_functions()
+    {
+        $given = (new Evaluator('ceil(-4.5)'))->exec();
+
+        $this->assertEquals('-4', $given);
+    }
+
+    /** @test */
+    public function evaluate_builtin_ceil_whole_positive_functions()
+    {
+        $given = (new Evaluator('ceil(4)'))->exec();
+
+        $this->assertEquals('4', $given);
+    }
+
+    /** @test */
+    public function evaluate_builtin_ceil_whole_negative_functions()
+    {
+        $given = (new Evaluator('ceil(-0.5)'))->exec();
+
+        $this->assertEquals('0', $given);
+    }
+
+    /** @test */
+    public function evaluate_combinations_of_functions()
+    {
+        $given = (new Evaluator('format(format(ceil(4.3), 2) * format(floor(4.5), 2), 2)'))->exec();
+
+        $this->assertEquals('BEGIN20.00END', "BEGIN{$given}END");
+    }
 }

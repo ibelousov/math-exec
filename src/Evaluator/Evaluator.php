@@ -70,10 +70,6 @@ class Evaluator
             $function = $this->EvalObj($node->function);
 
             $args = $this->evalExpressions($node->arguments);
-            
-            if(count($args) == 1) {
-                return $args[0];
-            }
 
             return $this->ApplyFunction($function, $args);
         }
@@ -144,7 +140,7 @@ class Evaluator
             case '\\': return $this->evaluateSqr($right);
         }
 
-        throw new UnknownOperatorException();
+        throw new UnknownOperatorException($operator);
     }
 
     public function evalBangOperatorExpression($right): ObjInterface
@@ -266,4 +262,5 @@ class Evaluator
     {
         return bcmod($leftVal, $rightVal, $this->precision);
     }
+
 }

@@ -226,32 +226,6 @@ class Parser
         return $exp;
     }
 
-    public function parseCallArguments()
-    {
-        $args = [];
-
-        if($this->peekTokenIs(OperatorType::RPAREN)) {
-            $this->nextToken();
-
-            return $args;
-        }
-
-        $this->nextToken();
-        $args[] = $this->parseExpression(Precedence::LOWEST);
-
-        while($this->peekTokenIs(OperatorType::COMMA)) {
-            $this->nextToken();
-            $this->nextToken();
-
-            $args[] = $this->parseExpression(Precedence::LOWEST);
-        }
-
-        if(!$this->expectPeek(OperatorType::RPAREN))
-            return null;
-
-        return $args;
-    }
-
     public function parseNumberLiteral(): AbstractExpression
     {
         $lit = new NumberLiteral($this->curToken);

@@ -15,13 +15,9 @@ while( true ) {
     $time = microtime(true);
 
     try {
-        $result = math_exec($line, $argv[1] ?? 40);
-    } catch (Ibelousov\MathExec\Exceptions\WrongTokenException $exception) {
-        echo "Lexing error: Wrong token\n";
-
-        continue;
-    } catch (Ibelousov\MathExec\Exceptions\WrongPrefixOperatorException $exception) {
-        echo "Parsing error: Wrong prefix operator\n";
+        $result = isset($argv[1]) ? math_exec($line, $argv[1]) : math_exec($line);
+    } catch (Exception $exception) {
+        echo $exception->getMessage() . "\n";
 
         continue;
     }
