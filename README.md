@@ -119,13 +119,16 @@ For example if you call this
     
 it evaluates to 1, because inner representation in this case is 0, and when you divide 6/5 you get 1 and not 1.2
 
-To compare numbers properly you should set precision properly. In case that showed above,
+To compare numbers properly you should set precision properly. In case showed above,
 you should do this, to properly compare numbers 
 
     \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4/4 == 6/5", 1) 
     
 ## REPL
 
+You can use REPL to test:
+
+    $ ./vendor/ibelousov/math-exec/src/REPL.php
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
