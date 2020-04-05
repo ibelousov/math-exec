@@ -198,7 +198,7 @@ You can use REPL to test expression evaluation:
 ```bash
 $ ./vendor/ibelousov/math-exec/src/REPL.php
 >> 4+4*4
-20.0000000000000000000000000000000000000000
+20
 Executed in 0.0025420188903809s.
 ```
 ## Contributing
