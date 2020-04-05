@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Evaluator;
 
-
 class ErrorObj implements ObjInterface
 {
     public $message;

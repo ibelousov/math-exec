@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Ast;
 
-
 class ExpressionStatement extends AbstractStatement
 {
     public $token;
@@ -13,7 +12,9 @@ class ExpressionStatement extends AbstractStatement
     {
         $this->token = $token;
     }
-    public function statementNode() {}
+    public function statementNode()
+    {
+    }
     public function TokenLiteral(): string
     {
         return $this->token->literal;
@@ -21,7 +22,7 @@ class ExpressionStatement extends AbstractStatement
 
     public function String(): string
     {
-        if($this->expression != null) {
+        if ($this->expression != null) {
             return $this->expression->String();
         }
 

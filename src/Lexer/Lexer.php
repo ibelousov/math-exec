@@ -27,10 +27,9 @@ class Lexer
 
         $this->eatWhitespace();
 
-        switch($this->ch)
-        {
-            case '=': 
-                if($this->peekChar() == '=') {
+        switch ($this->ch) {
+            case '=':
+                if ($this->peekChar() == '=') {
                     $ch = $this->ch;
                     $this->readChar();
                     $literal = $ch . $this->ch;
@@ -42,8 +41,8 @@ class Lexer
             case '+': $token = new Token(OperatorType::PLUS, $this->ch); break;
             case '-': $token = new Token(OperatorType::MINUS, $this->ch); break;
             case '^': $token = new Token(OperatorType::POWER, $this->ch); break;
-            case '!': 
-                if($this->peekChar() === '=') {
+            case '!':
+                if ($this->peekChar() === '=') {
                     $ch = $this->ch;
                     $this->readChar();
                     $literal = $ch . $this->ch;
@@ -53,7 +52,7 @@ class Lexer
                 }
                 break;
             case '/':
-                    if($this->peekChar() === '/') {
+                    if ($this->peekChar() === '/') {
                         $ch = $this->ch;
                         $this->readChar();
                         $literal = $ch . $this->ch;
@@ -66,8 +65,8 @@ class Lexer
             case '\\': $token = new Token(OperatorType::ROOTS, $this->ch); break;
             case '%':  $token = new Token(OperatorType::MODUL, $this->ch); break;
             case '*':  $token = new Token(OperatorType::ASTERISK, $this->ch); break;
-            case '<': 
-                if($this->peekChar() === '=') {
+            case '<':
+                if ($this->peekChar() === '=') {
                     $ch = $this->ch;
                     $this->readChar();
                     $literal = $ch . $this->ch;
@@ -76,8 +75,8 @@ class Lexer
                     $token = new Token(OperatorType::LT, $this->ch);
                 }
                 break;
-            case '>': 
-                if($this->peekChar() === '=') {
+            case '>':
+                if ($this->peekChar() === '=') {
                     $ch = $this->ch;
                     $this->readChar();
                     $literal = $ch . $this->ch;
@@ -93,9 +92,9 @@ class Lexer
                 $token = new Token(OperatorType::EOF, "");
                 break;
             default:
-                if($this->isLetter($this->ch)) {
+                if ($this->isLetter($this->ch)) {
                     return new Token(OperatorType::IDENT, $this->readIdentifier());
-                } else if($this->isDigit($this->ch)){
+                } elseif ($this->isDigit($this->ch)) {
                     return new Token(OperatorType::NUMBER, $this->readNumber());
                 }
                 throw new WrongTokenException();
@@ -108,7 +107,7 @@ class Lexer
 
     protected function readChar()
     {
-        if($this->readPosition >= strlen($this->input)) {
+        if ($this->readPosition >= strlen($this->input)) {
             $this->ch = null;
         } else {
             $this->ch = $this->input[$this->readPosition];
@@ -122,7 +121,7 @@ class Lexer
     {
         $position = $this->position;
 
-        while($this->isLetter($this->ch)) {
+        while ($this->isLetter($this->ch)) {
             $this->readChar();
         }
 
@@ -133,41 +132,48 @@ class Lexer
     {
         $position = $this->position;
 
-        while($this->isDigit($this->ch) || $this->ch == '.') {
+        while ($this->isDigit($this->ch) || $this->ch == '.') {
             $alreadyPoint = $this->ch == '.' ? true : false;
 
             $this->readChar();
             
-            if($alreadyPoint) break;
+            if ($alreadyPoint) {
+                break;
+            }
         }
 
-        while($this->isDigit($this->ch)) $this->readChar();
+        while ($this->isDigit($this->ch)) {
+            $this->readChar();
+        }
 
         $number = substr($this->input, $position, $this->position - $position);
 
-        if($this->ch == 'E') {
-
-            if(!$this->peekChar() == '-' || !$this->peekChar() == '+')
+        if ($this->ch == 'E') {
+            if (!$this->peekChar() == '-' || !$this->peekChar() == '+') {
                 throw new UnknownNumberFormatException();
+            }
 
             $this->readChar();
             $sign = $this->ch;
 
-            if(!is_numeric($this->peekChar()))
+            if (!is_numeric($this->peekChar())) {
                 throw new UnknownNumberFormatException();
+            }
 
             $this->readChar();
             $positionExpo = $this->position;
 
-            while($this->isDigit($this->ch))
+            while ($this->isDigit($this->ch)) {
                 $this->readChar();
+            }
 
             $power = substr($this->input, $positionExpo, $this->position - $positionExpo);
 
-            if($sign == '+')
+            if ($sign == '+') {
                 $number = bcmul($number, bcpow('10', $power), 64);
-            else
+            } else {
                 $number = bcdiv($number, bcpow('10', $power), 64);
+            }
         }
 
         return $number;
@@ -185,13 +191,14 @@ class Lexer
 
     protected function eatWhitespace()
     {
-        while(ctype_space($this->ch))
+        while (ctype_space($this->ch)) {
             $this->readChar();
+        }
     }
 
     protected function peekChar()
     {
-        if($this->readPosition >= strlen($this->input)) {
+        if ($this->readPosition >= strlen($this->input)) {
             return 0;
         }
 

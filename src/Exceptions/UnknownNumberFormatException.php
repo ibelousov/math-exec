@@ -3,7 +3,8 @@
 
 namespace Ibelousov\MathExec\Exceptions;
 
-
 use Exception;
 
-class UnknownNumberFormatException extends Exception {}
+class UnknownNumberFormatException extends Exception
+{
+}

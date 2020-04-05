@@ -3,15 +3,15 @@
 
 namespace Ibelousov\MathExec\Ast;
 
-
 class Program implements NodeInterface
 {
     public $statements;
 
     public function TokenLiteral(): string
     {
-        if(count($this->statements) > 0)
+        if (count($this->statements) > 0) {
             return $this->statements[0]->TokenLiteral();
+        }
 
         return "";
     }
@@ -20,7 +20,7 @@ class Program implements NodeInterface
     {
         $out = [];
 
-        foreach($this->statements as $statement) {
+        foreach ($this->statements as $statement) {
             $out[] = $statement->String();
         }
 

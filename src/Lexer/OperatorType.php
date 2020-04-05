@@ -18,7 +18,7 @@ class OperatorType
     const LT = "<";
     const GT = ">";
     const EQ = "==";
-    const NOT_EQ = "!="; 
+    const NOT_EQ = "!=";
     const GT_OR_EQ = ">=";
     const LT_OR_EQ = "<=";
     const LPAREN = "(";

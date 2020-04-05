@@ -12,15 +12,15 @@ use Ibelousov\MathExec\Exceptions\WrongArgumentNumberException;
 use Ibelousov\MathExec\Exceptions\WrongPrefixOperatorException;
 use Ibelousov\MathExec\Lexer\Lexer;
 use Ibelousov\MathExec\Parser\Parser;
-use Ibelousov\MathExec\Ast\{NodeInterface,
-    Program,
-    ExpressionStatement,
-    NumberLiteral,
-    Boolean,
-    PrefixExpression,
-    CallExpression,
-    Identifier,
-    InfixExpression};
+use Ibelousov\MathExec\Ast\NodeInterface;
+use Ibelousov\MathExec\Ast\Program;
+use Ibelousov\MathExec\Ast\ExpressionStatement;
+use Ibelousov\MathExec\Ast\NumberLiteral;
+use Ibelousov\MathExec\Ast\Boolean;
+use Ibelousov\MathExec\Ast\PrefixExpression;
+use Ibelousov\MathExec\Ast\CallExpression;
+use Ibelousov\MathExec\Ast\Identifier;
+use Ibelousov\MathExec\Ast\InfixExpression;
 use Ibelousov\MathExec\Lexer\OperatorType;
 
 class Evaluator
@@ -52,26 +52,29 @@ class Evaluator
 
     public function evalObj(NodeInterface $node): ObjInterface
     {
-        if($node instanceof Program)
+        if ($node instanceof Program) {
             return $this->EvalProgram($node);
+        }
 
-        if($node instanceof ExpressionStatement)
+        if ($node instanceof ExpressionStatement) {
             return $this->EvalObj($node->expression);
+        }
 
-        if($node instanceof NumberLiteral)
+        if ($node instanceof NumberLiteral) {
             return new NumberObj($node->value);
+        }
 
-        if($node instanceof Boolean) 
+        if ($node instanceof Boolean) {
             return new BooleanObj($node->bool);
+        }
 
-        if($node instanceof PrefixExpression) {
+        if ($node instanceof PrefixExpression) {
             $right = $this->EvalObj($node->right);
             
             return $this->EvalPrefixExpression($node->operator, $right);
         }
 
-        if($node instanceof CallExpression) {
-
+        if ($node instanceof CallExpression) {
             $function = $this->EvalObj($node->function);
 
             $args = $this->evalExpressions($node->arguments);
@@ -79,10 +82,11 @@ class Evaluator
             return $this->ApplyFunction($function, $args);
         }
 
-        if($node instanceof Identifier)
+        if ($node instanceof Identifier) {
             return $this->evalIdentifier($node);
+        }
 
-        if($node instanceof InfixExpression) {
+        if ($node instanceof InfixExpression) {
             $left = $this->evalObj($node->left);
 
             $right = $this->evalObj($node->right);
@@ -97,16 +101,16 @@ class Evaluator
     {
         $builtin = $this->builtIns->getBuiltin($node->value);
 
-        if($builtin)
+        if ($builtin) {
             return $builtin;
+        }
 
         throw new IdentifierNotFoundException($node->value);
     }
 
     public function applyFunction($function, $args): ObjInterface
     {
-        if($function instanceof BuiltinFunctionObj) {
-
+        if ($function instanceof BuiltinFunctionObj) {
             $buldinfunction = $function->builtinFunction;
 
             return $buldinfunction($args);
@@ -119,7 +123,7 @@ class Evaluator
     {
         $result = [];
 
-        foreach($exps as $exp) {
+        foreach ($exps as $exp) {
             $result[] = $this->evalObj($exp);
         }
 
@@ -130,7 +134,7 @@ class Evaluator
     {
         $result = null;
 
-        foreach($program->statements as $statement) {
+        foreach ($program->statements as $statement) {
             $result = $this->evalObj($statement);
         }
 
@@ -151,15 +155,16 @@ class Evaluator
     public function evalBangOperatorExpression($right): ObjInterface
     {
         switch ($right->value) {
-            case OperatorType::TRUEOP: case NULL: return $this->falseObj;
+            case OperatorType::TRUEOP: case null: return $this->falseObj;
             case OperatorType::FALSEOP: default: return $this->trueObj;
         }
     }
 
     public function evalMinusPrefixOperatorExpression($right): ObjInterface
     {
-        if($right->Type() != ObjType::NUMBER_OBJ)
+        if ($right->Type() != ObjType::NUMBER_OBJ) {
             throw new UnknownOperatorException($right->Type());
+        }
 
         return new NumberObj(bcmul($right->value, '-1', $this->precision));
     }
@@ -171,17 +176,21 @@ class Evaluator
 
     public function evalInfixExpression($operator, $left, $right): ObjInterface
     {
-        if($left->Type() == ObjType::NUMBER_OBJ && $right->Type() == ObjType::NUMBER_OBJ)
+        if ($left->Type() == ObjType::NUMBER_OBJ && $right->Type() == ObjType::NUMBER_OBJ) {
             return $this->evalIntegerInfixExpressioin($operator, $left, $right);
+        }
 
-        if($left->Type() != $right->Type())
+        if ($left->Type() != $right->Type()) {
             throw new TypeMismatchException($left->Type() . ' ' . $operator . ' ' . $right->Type());
+        }
 
-        if($operator == '==')
+        if ($operator == '==') {
             return new BooleanObj($left == $right);
+        }
 
-        if($operator == '!=')
+        if ($operator == '!=') {
             return new BooleanObj($left != $right);
+        }
 
         throw new UnknownOperatorException($left->Type() . ' ' . $operator . ' ' . $right->Type());
     }
@@ -233,8 +242,9 @@ class Evaluator
 
     public function evaluatePow($leftVal, $rightVal)
     {
-        if(strpos($leftVal, '.') !== false || strpos($rightVal, '.') !== false)
+        if (strpos($leftVal, '.') !== false || strpos($rightVal, '.') !== false) {
             throw new EvaluatingPowerException("Error processing powering: $leftVal and $rightVal should be whole values", 1);
+        }
 
         return bcpow($leftVal, $rightVal, $this->precision);
     }
@@ -268,5 +278,4 @@ class Evaluator
     {
         return bcmod($leftVal, $rightVal, $this->precision);
     }
-
 }

@@ -3,16 +3,17 @@
 namespace Ibelousov\MathExec\Parser;
 
 use Ibelousov\MathExec\Exceptions\WrongPrefixOperatorException;
-use Ibelousov\MathExec\Lexer\{Lexer, OperatorType};
-use Ibelousov\MathExec\Ast\{AbstractExpression,
-    Boolean,
-    CallExpression,
-    ExpressionStatement,
-    Identifier,
-    InfixExpression,
-    NumberLiteral,
-    PrefixExpression,
-    Program};
+use Ibelousov\MathExec\Lexer\Lexer;
+use Ibelousov\MathExec\Lexer\OperatorType;
+use Ibelousov\MathExec\Ast\AbstractExpression;
+use Ibelousov\MathExec\Ast\Boolean;
+use Ibelousov\MathExec\Ast\CallExpression;
+use Ibelousov\MathExec\Ast\ExpressionStatement;
+use Ibelousov\MathExec\Ast\Identifier;
+use Ibelousov\MathExec\Ast\InfixExpression;
+use Ibelousov\MathExec\Ast\NumberLiteral;
+use Ibelousov\MathExec\Ast\PrefixExpression;
+use Ibelousov\MathExec\Ast\Program;
 
 class Parser
 {
@@ -33,65 +34,65 @@ class Parser
         $this->prefixParseFns = [];
         $this->infixParseFns = [];
 
-        $this->registerPrefix(OperatorType::IDENT, function(){
+        $this->registerPrefix(OperatorType::IDENT, function () {
             return $this->parseIdentifier();
         });
-        $this->registerPrefix(OperatorType::NUMBER, function(){
+        $this->registerPrefix(OperatorType::NUMBER, function () {
             return $this->parseNumberLiteral();
         });
-        $this->registerPrefix(OperatorType::BANG, function(){
+        $this->registerPrefix(OperatorType::BANG, function () {
             return $this->parsePrefixExpression();
         });
-        $this->registerPrefix(OperatorType::MINUS, function(){
+        $this->registerPrefix(OperatorType::MINUS, function () {
             return $this->parsePrefixExpression();
         });
-        $this->registerPrefix(OperatorType::ROOTS, function() {
+        $this->registerPrefix(OperatorType::ROOTS, function () {
             return $this->parsePrefixExpression();
         });
 
-        $this->registerPrefix(OperatorType::LPAREN, function(){
+        $this->registerPrefix(OperatorType::LPAREN, function () {
             return $this->parseGroupedExpression();
         });
-        $this->registerInfix(OperatorType::PLUS, function($expression){
+        $this->registerInfix(OperatorType::PLUS, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::MINUS, function($expression){
+        $this->registerInfix(OperatorType::MINUS, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::SLASH, function($expression){
+        $this->registerInfix(OperatorType::SLASH, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::WDIV, function($expression) {
+        $this->registerInfix(OperatorType::WDIV, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::ASTERISK, function($expression){
+        $this->registerInfix(OperatorType::ASTERISK, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::POWER, function($expression) {
+        $this->registerInfix(OperatorType::POWER, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::EQ, function($expression) {
+        $this->registerInfix(OperatorType::EQ, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::NOT_EQ, function($expression){
+        $this->registerInfix(OperatorType::NOT_EQ, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::LT, function($expression){
+        $this->registerInfix(OperatorType::LT, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::LT_OR_EQ, function($expression){
+        $this->registerInfix(OperatorType::LT_OR_EQ, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::GT, function($expression){
+        $this->registerInfix(OperatorType::GT, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::GT_OR_EQ, function($expression) {
+        $this->registerInfix(OperatorType::GT_OR_EQ, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::MODUL, function($expression) {
+        $this->registerInfix(OperatorType::MODUL, function ($expression) {
             return $this->parseInfixExpression($expression);
         });
-        $this->registerInfix(OperatorType::LPAREN, function($expression) {
+        $this->registerInfix(OperatorType::LPAREN, function ($expression) {
             return $this->parseCallExpression($expression);
         });
         
@@ -104,10 +105,10 @@ class Parser
         $program = new Program();
         $program->statements = [];
 
-        while($this->curToken->tokenType != OperatorType::EOF) {
+        while ($this->curToken->tokenType != OperatorType::EOF) {
             $stmt = $this->parseStatement();
             
-            if($stmt != null) {
+            if ($stmt != null) {
                 $program->statements[] = $stmt;
             }
             $this->nextToken();
@@ -134,18 +135,17 @@ class Parser
     {
         $prefix = array_key_exists($this->curToken->tokenType, $this->prefixParseFns);
 
-        if(!$prefix) {
+        if (!$prefix) {
             throw new WrongPrefixOperatorException($this->curToken->tokenType);
         }
 
         $leftExp = $this->prefixParseFns[$this->curToken->tokenType]();
 
-        while(!$this->peekTokenIs(OperatorType::EOF) && $precedence < $this->peekPrecedence())
-        {
-            $infix = array_key_exists($this->peekToken->tokenType, 
+        while (!$this->peekTokenIs(OperatorType::EOF) && $precedence < $this->peekPrecedence()) {
+            $infix = array_key_exists($this->peekToken->tokenType,
                 $this->infixParseFns);
 
-            if(!$infix) {
+            if (!$infix) {
                 return $leftExp;
             }
 
@@ -154,7 +154,6 @@ class Parser
             $this->nextToken();
 
             $leftExp = $infix($leftExp);
-
         }
 
         return $leftExp;
@@ -162,7 +161,7 @@ class Parser
 
     public function parsePrefixExpression(): AbstractExpression
     {
-        $expression = new PrefixExpression($this->curToken, 
+        $expression = new PrefixExpression($this->curToken,
             $this->curToken->literal);
 
         $this->nextToken();
@@ -189,7 +188,7 @@ class Parser
     {
         $list = [];
 
-        if($this->peekTokenIs($end)) {
+        if ($this->peekTokenIs($end)) {
             $this->nextToken();
 
             return $list;
@@ -199,13 +198,13 @@ class Parser
 
         $list[] = $this->parseExpression(Precedence::LOWEST);
 
-        while($this->peekTokenIs(OperatorType::COMMA)) {
+        while ($this->peekTokenIs(OperatorType::COMMA)) {
             $this->nextToken();
             $this->nextToken();
             $list[] = $this->parseExpression(Precedence::LOWEST);
         }
 
-        if(!$this->expectPeek($end)) {
+        if (!$this->expectPeek($end)) {
             return null;
         }
 
@@ -230,7 +229,7 @@ class Parser
     {
         $lit = new NumberLiteral($this->curToken);
 
-        if(!is_numeric($this->curToken->literal)) {
+        if (!is_numeric($this->curToken->literal)) {
             $this->errors[] = "could not parse {$lit->value} as integer";
 
             return null;
@@ -247,7 +246,7 @@ class Parser
 
         $exp = $this->parseExpression(Precedence::LOWEST);
 
-        if(!$this->expectPeek(OperatorType::RPAREN)) {
+        if (!$this->expectPeek(OperatorType::RPAREN)) {
             return null;
         }
 
@@ -271,15 +270,16 @@ class Parser
 
     public function peekPrecedence(): int
     {
-        if(array_key_exists($this->peekToken->tokenType, Precedence::precedences))
+        if (array_key_exists($this->peekToken->tokenType, Precedence::precedences)) {
             return Precedence::precedences[$this->peekToken->tokenType];
+        }
 
         return Precedence::LOWEST;
     }
 
     public function curPrecedence(): int
     {
-        if(array_key_exists($this->curToken->tokenType, Precedence::precedences)) {
+        if (array_key_exists($this->curToken->tokenType, Precedence::precedences)) {
             return Precedence::precedences[$this->curToken->tokenType];
         }
 
@@ -288,7 +288,7 @@ class Parser
 
     public function expectPeek($t): bool
     {
-        if($this->peekTokenIs($t)) {
+        if ($this->peekTokenIs($t)) {
             $this->nextToken();
             return true;
         }
