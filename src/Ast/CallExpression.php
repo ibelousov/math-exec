@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Ast;
 
-
 class CallExpression extends AbstractExpression
 {
     public $token;
@@ -17,7 +16,9 @@ class CallExpression extends AbstractExpression
         $this->arguments = $arguments;
     }
 
-    public function expressionNode() {}
+    public function expressionNode()
+    {
+    }
     public function TokenLiteral(): string
     {
         return $this->token->literal;
@@ -27,8 +28,9 @@ class CallExpression extends AbstractExpression
         $out = '';
 
         $args = [];
-        foreach((array)$this->arguments as $argument)
+        foreach ((array)$this->arguments as $argument) {
             $args[] = $argument->String();
+        }
 
         $out .= $this->function->String();
         $out .= '(';

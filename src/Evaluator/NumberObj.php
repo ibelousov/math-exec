@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Evaluator;
 
-
 class NumberObj implements ObjInterface
 {
     public $value;

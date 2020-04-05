@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Tests;
 
-
 use Ibelousov\MathExec\Parser\Parser;
 use Ibelousov\MathExec\Lexer\Lexer;
 use PHPUnit\Framework\TestCase;

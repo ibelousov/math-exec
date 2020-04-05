@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Evaluator;
 
-
 class BuiltinFunctionObj implements ObjInterface
 {
     public $builtinFunction;
