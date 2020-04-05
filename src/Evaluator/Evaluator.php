@@ -46,8 +46,9 @@ class Evaluator
 
         $value = rtrim($value, '0');
 
-        if($value[strlen($value)-1] == '.')
+        if ($value[strlen($value)-1] == '.') {
             return substr($value, 0, strlen($value)-1);
+        }
 
         return $value;
     }
