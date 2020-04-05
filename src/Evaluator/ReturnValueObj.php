@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Evaluator;
 
-
 class ReturnValueObj implements ObjInterface
 {
     public $value;

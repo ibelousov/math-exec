@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Ast;
 
-
 class Boolean extends AbstractExpression
 {
     public $token;
@@ -15,7 +14,9 @@ class Boolean extends AbstractExpression
         $this->bool = $value;
     }
 
-    public function expressionNode() {}
+    public function expressionNode()
+    {
+    }
     public function TokenLiteral(): string
     {
         return $this->token->literal;

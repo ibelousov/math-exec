@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Tests;
 
-
 use Ibelousov\MathExec\Evaluator\Evaluator;
 use Ibelousov\MathExec\Exceptions\EvaluatingPowerException;
 use Ibelousov\MathExec\Exceptions\IdentifierNotFoundException;

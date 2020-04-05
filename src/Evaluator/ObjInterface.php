@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Evaluator;
 
-
 interface ObjInterface
 {
     public function Type(): string;

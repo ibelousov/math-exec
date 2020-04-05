@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Evaluator;
 
-
 class BooleanObj implements ObjInterface
 {
     public $value;

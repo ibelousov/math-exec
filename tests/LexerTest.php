@@ -325,6 +325,4 @@ class LexerTest extends TestCase
         $lexer = new Lexer('4E-+4');
         $lexer->nextToken();
     }
-
-
 }

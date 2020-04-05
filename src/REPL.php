@@ -11,23 +11,24 @@ foreach (array(__DIR__ . '/../../../autoload.php', __DIR__ . '/../../vendor/auto
 
 require MATH_EXEC_INSTALL;
 
-while( true ) {
-
+while (true) {
     echo ">> ";
 
     // Read input
-    $line = trim( fgets(STDIN) );
+    $line = trim(fgets(STDIN));
 
-    if(strtolower(trim($line)) == 'exit')
+    if (strtolower(trim($line)) == 'exit') {
         break;
+    }
 
     $time = microtime(true);
 
     try {
-        if(isset($argv[1]))
+        if (isset($argv[1])) {
             $result = \Ibelousov\MathExec\Evaluator\Evaluator::math_exec($line, $argv[1]);
-        else
+        } else {
             $result = \Ibelousov\MathExec\Evaluator\Evaluator::math_exec($line);
+        }
     } catch (Exception $exception) {
         echo $exception->getMessage() . "\n";
 

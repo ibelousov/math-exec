@@ -3,7 +3,6 @@
 
 namespace Ibelousov\MathExec\Ast;
 
-
 class InfixExpression extends AbstractExpression
 {
     public $token;
@@ -18,7 +17,9 @@ class InfixExpression extends AbstractExpression
         $this->left = $left;
     }
 
-    public function expressionNode() {}
+    public function expressionNode()
+    {
+    }
     public function TokenLiteral(): string
     {
         return $this->token->literal;
