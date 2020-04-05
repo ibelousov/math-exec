@@ -49,37 +49,37 @@ by default it is 40 signs after point
 // Multiplication
 ```php
 \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 * 2"); 
-//  "4.0000000000000000000000000000000000000000"
+//  "4"
 ```
 // Division
 ```php
 \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 / 2"); 
-// "1.0000000000000000000000000000000000000000"
+// "1"
 ```
 ```php
 // Power
 \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 ^ 3"); 
-// "8.0000000000000000000000000000000000000000" (left and right should be whole numbers)
+// "8" (left and right should be whole numbers)
 ```
 ```php
 // Modul
 \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("7 % 2"); 
-// "1.0000000000000000000000000000000000000000"
+// "1"
 ```
 ```php
 // Whole division
 \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("3.1415 // 2"); 
-// "1.0000000000000000000000000000000000000000"
+// "1"
 ```
 ```php
 // Associativity
 \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 + 2 * 2");  
-// "6.0000000000000000000000000000000000000000"
+// "6"
 ```
 ```php
 // Parenthesis
 \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("(2 + 2) * 2"); 
-// "8.0000000000000000000000000000000000000000"
+// "8"
 ```
 ```php
 // Float to string convertion number formats
@@ -117,15 +117,15 @@ $b = 0.1415E-10;
 ```
 ### Functions
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("floor(3.1415)") 
+\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("floor(3.1415)"); 
 // "3"
 ```
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("ceil(3.1415)") 
+\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("ceil(3.1415)");
 // "4"
 ```
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("format(ceil(3.1415) + floor(3.1415), 2)") 
+\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("format(ceil(3.1415) + floor(3.1415), 2)");
 // "7.00" 
 ```
 
@@ -143,23 +143,63 @@ echo \Ibelousov\MathExec\Evaluator\Evaluator::math_exec('inc(inc(2))',40);
 
 ## Use with cautiousness
 
+### Inner representation of numbers
 For example if you call this
 ```php
 \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4/4 == 6/5",0);
 ```    
 it evaluates to 1, because inner representation in this case is 0, and when you divide 6/5 you get 1 and not 1.2
 
-To compare numbers properly you should set precision properly. In case showed above,
+For accurate numbers comparison you should set precision properly. In case shown above,
 you should do this, to properly compare numbers 
 ```php
 \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4/4 == 6/5", 1);
 ```
 
+### Converting to native PHP number formats
+
+```php
+(int)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_INT_MAX); 
+// Evaluates to PHP_INT_MAX number
+```
+```php
+(int)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_INT_MIN);
+// Evaluates to PHP_INT_MIN number
+```
+```php
+(float)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec('\\2 + \\2', 30);
+// cuts result 2.8284271247461900976033774484193961571392 to 2.8284271247462  
+```
+```php
+(float)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_FLOAT_MIN);
+// Evaluates to PHP_FLOAT_MIN number
+```
+```php
+(float)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec('1.7976931348623157E+308');
+// Evaluates to PHP_FLOAT_MAX. Today i have no time to figure out, why is
+// (float)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_FLOAT_MAX)
+// doesnt return correct value, but it is a fact
+```
+
+Other convertions, like this 
+```php
+(int)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_INT_MIN . ' + 1');
+```
+are unpredictable
+
+In general I think that conversions to others formats and not strings are unpredicable at all,
+depending on PHP version and many other things. To evaluate and then compare numbers with high
+precision and/or big numbers, you should prefer storing values in strings instead of converting
+them into float or int.
+
 ## REPL
 
-You can use REPL to test:
+You can use REPL to test expression evaluation:
 ```bash
-    $ ./vendor/ibelousov/math-exec/src/REPL.php
+$ ./vendor/ibelousov/math-exec/src/REPL.php
+>> 4+4*4
+20.0000000000000000000000000000000000000000
+Executed in 0.0025420188903809s.
 ```
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

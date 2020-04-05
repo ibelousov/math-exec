@@ -42,7 +42,14 @@ class Evaluator
 
     public static function math_exec($expression, $inner_precision = 40)
     {
-        return (new self($expression, $inner_precision))->exec()->value;
+        $value = (new self($expression, $inner_precision))->exec()->value;
+
+        $value = rtrim($value, '0');
+
+        if($value[strlen($value)-1] == '.')
+            return substr($value, 0, strlen($value)-1);
+
+        return $value;
     }
 
     public function exec()

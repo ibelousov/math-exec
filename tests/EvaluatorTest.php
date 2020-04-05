@@ -239,4 +239,54 @@ class EvaluatorTest extends TestCase
 
         $this->assertEquals('BEGIN20.00END', "BEGIN{$given}END");
     }
+
+    /** @test */
+    public function evaluate_and_convert_float_to_int()
+    {
+        $given = Evaluator::math_exec('\\2 + \\2');
+
+        $this->assertEquals(2, (int)$given);
+    }
+
+    /** @test */
+    public function evaluate_and_convert_to_int_min()
+    {
+        $given = Evaluator::math_exec((string)PHP_INT_MIN);
+
+        $this->assertEquals(PHP_INT_MIN, (int)$given);
+    }
+
+    /** @test */
+    public function evaluate_and_convert_to_int_max()
+    {
+        $given = Evaluator::math_exec((string)PHP_INT_MAX);
+
+        $this->assertEquals(PHP_INT_MAX, (int)$given);
+    }
+
+    /** @test */
+    public function evaluate_and_convert_to_float()
+    {
+        $given = Evaluator::math_exec('\\2 + \\2');
+
+        var_dump($given, (float)$given);
+
+        $this->assertEquals(2.8284271247462, (float)$given);
+    }
+
+    /** @test */
+    public function evaluate_and_convert_to_float_max()
+    {
+        $given = Evaluator::math_exec("1.7976931348623157E+308");
+
+        $this->assertEquals(PHP_FLOAT_MAX, (float)$given);
+    }
+
+    /** @test */
+    public function evaluate_and_convert_to_float_min()
+    {
+        $given = Evaluator::math_exec((string)PHP_FLOAT_MIN);
+
+        $this->assertEquals(PHP_FLOAT_MIN, (float)$given);
+    }
 }
