@@ -183,7 +183,7 @@ you should do this, to properly compare numbers
 
 Other convertions, like this 
 ```php
-(int)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_INT_MIN . ' + 1');
+(int)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_INT_MIN . ' - 1');
 ```
 are unpredictable
 
