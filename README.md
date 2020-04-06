@@ -16,13 +16,12 @@ return Evaluator::math_exec("$a * 4 + 30 * 2 + $b / 3");
 
 and this also is true:
 ```php
-var_dump([Evaluator::math_exec("floor((0.7+0.1)*10)") == 8]);
-// array (size=1)
-//     0 => boolean true
+var_dump(Evaluator::math_exec("floor((0.7+0.1)*10)") == 8);
+// boolean true
 
 var_dump([floor((0.7+0.1)*10) == 8]);
 // array (size=1)
-//     0 => boolean false
+// boolean false
 ```
 
 It utilizes a Pratt parser, and uses ext-bcmath extension to evaluate operations.
