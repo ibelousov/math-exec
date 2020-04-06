@@ -2,3 +2,5 @@ build
 vendor
 composer.lock
 .idea
+TODO
+TODO.md

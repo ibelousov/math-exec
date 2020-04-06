@@ -3,8 +3,45 @@
 MathExec is a php library for parsing and evaluating math expressions like this: 
 
 ```php
-echo \Ibelousov\MathExec\Evaluator\Evaluator::math_exec("5 ^ 2 + 36 / 2 - 1");
+echo Evaluator::math_exec("5 ^ 2 + 36 / 2 - 2 * 0.5");
 ```
+
+or like this:
+```php
+$a = 1.5E+2;
+$b = 18;
+
+return Evaluator::math_exec("$a * 4 + 30 * 2 + $b / 3");
+```
+
+and this also is true:
+```php
+var_dump([Evaluator::math_exec("floor((0.7+0.1)*10)") == 8]);
+// array (size=1)
+//     0 => boolean true
+
+var_dump([floor((0.7+0.1)*10) == 8]);
+// array (size=1)
+//     0 => boolean false
+```
+
+It utilizes a Pratt parser, and uses ext-bcmath extension to evaluate operations.
+For example this expression 
+```php
+$a = 4;
+$b = 4; 
+$c = 4;
+
+Evaluator::math_exec("$a + $b / $c", 40);
+```
+
+internally turns into this
+
+```php
+bcadd($a, bcdiv($b, $c, 40), 40);
+ ```
+
+it is very nice and convenient to write expressions naturally, without using bcadd, bcdiv, etc.
 
 ## Installation
 
@@ -15,16 +52,22 @@ composer install ibelousov/math-exec
 ```
 ## Usage
 
+First of all import class Evaluator:
+
+```php
+use \Ibelousov\MathExec\Evaluator\Evaluator;
+```
+
 ### Supported things
 
 ```php
 // Root  
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("\\2"); 
+Evaluator::math_exec("\\2"); 
 // "1.1892071150027210667174999705604759152929"
 ```
 (you could set inner precision, like this:
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("\\2", 1000); 
+Evaluator::math_exec("\\2", 1000); 
 
 // "1.1892071150027210667174999705604759152929720924638174130190022
 // 2471946666822691715987078134453813767371603739477476921318606372
@@ -48,84 +91,84 @@ by default it is 40 signs after point
 
 // Multiplication
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 * 2"); 
+Evaluator::math_exec("2 * 2"); 
 //  "4"
 ```
 // Division
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 / 2"); 
+Evaluator::math_exec("2 / 2"); 
 // "1"
 ```
 ```php
 // Power
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 ^ 3"); 
+Evaluator::math_exec("2 ^ 3"); 
 // "8" (left and right should be whole numbers)
 ```
 ```php
 // Modul
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("7 % 2"); 
+Evaluator::math_exec("7 % 2"); 
 // "1"
 ```
 ```php
 // Whole division
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("3.1415 // 2"); 
+Evaluator::math_exec("3.1415 // 2"); 
 // "1"
 ```
 ```php
 // Associativity
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("2 + 2 * 2");  
+Evaluator::math_exec("2 + 2 * 2");  
 // "6"
 ```
 ```php
 // Parenthesis
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("(2 + 2) * 2"); 
+Evaluator::math_exec("(2 + 2) * 2"); 
 // "8"
 ```
 ```php
 // Float to string convertion number formats
 $a = 0.1415E-10;
 $b = 0.1415E-10;
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("$a * $b"); 
+Evaluator::math_exec("$a * $b"); 
 // "0.0000000000000000000002002225000000000000"
 ```
 ```php
 // comparison
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4 ^ 128 > 4 ^ 64"); 
+Evaluator::math_exec("4 ^ 128 > 4 ^ 64"); 
 // "1" 
 ```
 
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4 ^ 128 < 4 ^ 64"); 
+Evaluator::math_exec("4 ^ 128 < 4 ^ 64"); 
 // "0" 
 ```
 
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4 ^ 64 + 1 >= 4 ^ 64"); 
+Evaluator::math_exec("4 ^ 64 + 1 >= 4 ^ 64"); 
 // "1"
 ```
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4 ^ 64 <= 4 ^ 64"); 
+Evaluator::math_exec("4 ^ 64 <= 4 ^ 64"); 
 // "1"
 ```
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4 == 4"); 
+Evaluator::math_exec("4 == 4"); 
 // "1"
 ```
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4 != 4"); 
+Evaluator::math_exec("4 != 4"); 
 // "0"
 ```
 ### Functions
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("floor(3.1415)"); 
+Evaluator::math_exec("floor(3.1415)"); 
 // "3"
 ```
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("ceil(3.1415)");
+Evaluator::math_exec("ceil(3.1415)");
 // "4"
 ```
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("format(ceil(3.1415) + floor(3.1415), 2)");
+Evaluator::math_exec("format(ceil(3.1415) + floor(3.1415), 2)");
 // "7.00" 
 ```
 
@@ -138,7 +181,7 @@ Also you can add your own functions like this:
     return new \Ibelousov\MathExec\Evaluator\NumberObj(bcadd($args[0]->value, '1', $precision));
 });
 
-echo \Ibelousov\MathExec\Evaluator\Evaluator::math_exec('inc(inc(2))',40);
+echo Evaluator::math_exec('inc(inc(2))',40);
 ```
 
 ## Use with cautiousness
@@ -146,36 +189,36 @@ echo \Ibelousov\MathExec\Evaluator\Evaluator::math_exec('inc(inc(2))',40);
 ### Inner representation of numbers
 For example if you call this
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4/4 == 6/5",0);
+Evaluator::math_exec("4/4 == 6/5",0);
 ```    
 it evaluates to 1, because inner representation in this case is 0, and when you divide 6/5 you get 1 and not 1.2
 
 For accurate numbers comparison you should set precision properly. In case shown above,
 you should do this, to properly compare numbers 
 ```php
-\Ibelousov\MathExec\Evaluator\Evaluator::math_exec("4/4 == 6/5", 1);
+Evaluator::math_exec("4/4 == 6/5", 1);
 ```
 
 ### Converting to native PHP number formats
 
 ```php
-(int)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_INT_MAX); 
+(int)Evaluator::math_exec((string)PHP_INT_MAX); 
 // Evaluates to PHP_INT_MAX number
 ```
 ```php
-(int)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_INT_MIN);
+(int)Evaluator::math_exec((string)PHP_INT_MIN);
 // Evaluates to PHP_INT_MIN number
 ```
 ```php
-(float)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec('\\2 + \\2', 30);
+(float)Evaluator::math_exec('\\2 + \\2', 30);
 // cuts result 2.8284271247461900976033774484193961571392 to 2.8284271247462  
 ```
 ```php
-(float)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_FLOAT_MIN);
+(float)Evaluator::math_exec((string)PHP_FLOAT_MIN);
 // Evaluates to PHP_FLOAT_MIN number
 ```
 ```php
-(float)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec('1.7976931348623157E+308');
+(float)Evaluator::math_exec('1.7976931348623157E+308');
 // Evaluates to PHP_FLOAT_MAX. Today i have no time to figure out, why is
 // (float)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_FLOAT_MAX)
 // doesnt return correct value, but it is a fact
@@ -183,14 +226,12 @@ you should do this, to properly compare numbers
 
 Other convertions, like this 
 ```php
-(int)\Ibelousov\MathExec\Evaluator\Evaluator::math_exec((string)PHP_INT_MIN . ' - 1');
+(int)Evaluator::math_exec((string)PHP_INT_MIN . ' - 1');
 ```
 are unpredictable
 
-In general I think that conversions to others formats and not strings are unpredicable at all,
-depending on PHP version and many other things. To evaluate and then compare numbers with high
-precision and/or big numbers, you should prefer storing values in strings instead of converting
-them into float or int.
+To evaluate and then compare numbers with high precision and/or big numbers, you should 
+prefer storing values in strings instead of converting them into float or int.
 
 ## REPL
 
