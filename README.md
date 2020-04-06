@@ -20,7 +20,6 @@ var_dump(Evaluator::math_exec("floor((0.7+0.1)*10)") == 8);
 // boolean true
 
 var_dump([floor((0.7+0.1)*10) == 8]);
-// array (size=1)
 // boolean false
 ```
 
