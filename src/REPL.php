@@ -25,9 +25,9 @@ while (true) {
 
     try {
         if (isset($argv[1])) {
-            $result = \Ibelousov\MathExec\Evaluator\Evaluator::math_exec($line, $argv[1]);
+            $result = \Ibelousov\MathExec\Evaluator\Evaluator::mathExec($line, $argv[1]);
         } else {
-            $result = \Ibelousov\MathExec\Evaluator\Evaluator::math_exec($line);
+            $result = \Ibelousov\MathExec\Evaluator\Evaluator::mathExec($line);
         }
     } catch (Exception $exception) {
         echo $exception->getMessage() . "\n";

@@ -2,8 +2,10 @@
 
 namespace Ibelousov\MathExec\Evaluator;
 
+use Ibelousov\MathExec\Exceptions\DivisionByZeroException;
 use Ibelousov\MathExec\Exceptions\EvaluatingPowerException;
 use Ibelousov\MathExec\Exceptions\IdentifierNotFoundException;
+use Ibelousov\MathExec\Exceptions\IncorrectEnvironmentException;
 use Ibelousov\MathExec\Exceptions\InvalidNodeException;
 use Ibelousov\MathExec\Exceptions\NotAFunctionException;
 use Ibelousov\MathExec\Exceptions\TypeMismatchException;
@@ -40,7 +42,7 @@ class Evaluator
         $this->precision= $precision;
     }
 
-    public static function math_exec($expression, $inner_precision = 40)
+    public static function mathExec($expression, $inner_precision = 40)
     {
         $value = (new self($expression, $inner_precision))->exec()->value;
 
@@ -53,19 +55,26 @@ class Evaluator
         return $value;
     }
 
-    public function exec()
+    public static function mathPrepare($expression, $inner_precision = 40)
     {
+        return new self($expression, $inner_precision);
+    }
+
+    public function exec($environment = [])
+    {
+        $this->environment = $environment;
+
         return $this->evalObj($this->program);
     }
 
     public function evalObj(NodeInterface $node): ObjInterface
     {
         if ($node instanceof Program) {
-            return $this->EvalProgram($node);
+            return $this->evalProgram($node);
         }
 
         if ($node instanceof ExpressionStatement) {
-            return $this->EvalObj($node->expression);
+            return $this->evalObj($node->expression);
         }
 
         if ($node instanceof NumberLiteral) {
@@ -107,6 +116,15 @@ class Evaluator
 
     public function evalIdentifier($node): ObjInterface
     {
+        if(array_key_exists($node->value, $this->environment)) {
+            $value = (string)$this->environment[$node->value];
+
+            if(!is_numeric($value))
+                throw new IncorrectEnvironmentException;
+
+            return new NumberObj($value);
+        }
+
         $builtin = $this->builtIns->getBuiltin($node->value);
 
         if ($builtin) {
@@ -259,6 +277,9 @@ class Evaluator
 
     public function evaluateDiv($leftVal, $rightVal)
     {
+        if(bccomp('0', $rightVal, $this->precision) == 0)
+            throw new DivisionByZeroException("Cannot divide $leftVal by $rightVal");
+
         return bcdiv($leftVal, $rightVal, $this->precision);
     }
 

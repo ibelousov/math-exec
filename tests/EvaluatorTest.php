@@ -243,7 +243,7 @@ class EvaluatorTest extends TestCase
     /** @test */
     public function evaluate_and_convert_float_to_int()
     {
-        $given = Evaluator::math_exec('\\2 + \\2');
+        $given = Evaluator::mathExec('\\2 + \\2');
 
         $this->assertEquals(2, (int)$given);
     }
@@ -251,7 +251,7 @@ class EvaluatorTest extends TestCase
     /** @test */
     public function evaluate_and_convert_to_int_min()
     {
-        $given = Evaluator::math_exec((string)PHP_INT_MIN);
+        $given = Evaluator::mathExec((string)PHP_INT_MIN);
 
         $this->assertEquals(PHP_INT_MIN, (int)$given);
     }
@@ -259,7 +259,7 @@ class EvaluatorTest extends TestCase
     /** @test */
     public function evaluate_and_convert_to_int_max()
     {
-        $given = Evaluator::math_exec((string)PHP_INT_MAX);
+        $given = Evaluator::mathExec((string)PHP_INT_MAX);
 
         $this->assertEquals(PHP_INT_MAX, (int)$given);
     }
@@ -267,9 +267,7 @@ class EvaluatorTest extends TestCase
     /** @test */
     public function evaluate_and_convert_to_float()
     {
-        $given = Evaluator::math_exec('\\2 + \\2');
-
-        var_dump($given, (float)$given);
+        $given = Evaluator::mathExec('\\2 + \\2');
 
         $this->assertEquals(2.8284271247462, (float)$given);
     }
@@ -277,7 +275,7 @@ class EvaluatorTest extends TestCase
     /** @test */
     public function evaluate_and_convert_to_float_max()
     {
-        $given = Evaluator::math_exec("1.7976931348623157E+308");
+        $given = Evaluator::mathExec("1.7976931348623157E+308");
 
         $this->assertEquals(PHP_FLOAT_MAX, (float)$given);
     }
@@ -285,8 +283,20 @@ class EvaluatorTest extends TestCase
     /** @test */
     public function evaluate_and_convert_to_float_min()
     {
-        $given = Evaluator::math_exec((string)PHP_FLOAT_MIN);
+        $given = Evaluator::mathExec((string)PHP_FLOAT_MIN);
 
         $this->assertEquals(PHP_FLOAT_MIN, (float)$given);
+    }
+
+    /** @test */
+    public function prepare_and_evaluate_from_env()
+    {
+        $parsed = Evaluator::mathPrepare('a * b');
+
+        foreach([[1, 2, 2],[3, 5, 15],[99, 55, 99*55],[123, 596, 123 * 596]] as $item) {
+            $result = $parsed->exec(['a' => $item[0], 'b' => $item[1]]);
+
+            $this->assertEquals((string)$item[2], $result);
+        }
     }
 }

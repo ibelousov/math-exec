@@ -228,4 +228,14 @@ class ParserTest extends TestCase
 
         $this->assertEquals($program->String(), "((2 + ((2 * 2) / (2 ^ 2))) == (((2 / 2) * 2) + (((2 / (2 ^ 2)) * ((2 % 2) + 2)) / (!2))))");
     }
+
+    /** @test */
+    public function parse_with_constants()
+    {
+        $lexer = new Lexer("a + b / c");
+        $parser= new Parser($lexer);
+
+        $program = $parser->parseProgram();
+        $this->assertEquals('(a + (b / c))', $program->String());
+    }
 }
