@@ -293,7 +293,7 @@ class EvaluatorTest extends TestCase
     {
         $parsed = Evaluator::mathPrepare('a * b');
 
-        foreach([[1, 2, 2],[3, 5, 15],[99, 55, 99*55],[123, 596, 123 * 596]] as $item) {
+        foreach ([[1, 2, 2],[3, 5, 15],[99, 55, 99*55],[123, 596, 123 * 596]] as $item) {
             $result = $parsed->exec(['a' => $item[0], 'b' => $item[1]]);
 
             $this->assertEquals((string)$item[2], $result);
@@ -305,7 +305,7 @@ class EvaluatorTest extends TestCase
     {
         $parsed = Evaluator::mathPrepare('\\a');
 
-        foreach([[2, 0, 1],[2, 1, 1.4],[2, 2, 1.41],[2, 3, 1.414]] as $item) {
+        foreach ([[2, 0, 1],[2, 1, 1.4],[2, 2, 1.41],[2, 3, 1.414]] as $item) {
             $result = $parsed->exec(['a' => $item[0]], $item[1]);
 
             $this->assertEquals((string)$item[2], $result);

@@ -56,7 +56,7 @@ class Evaluator
     {
         $this->environment = $environment;
 
-        if(is_int($precision)) {
+        if (is_int($precision)) {
             $this->precision = $precision;
         }
 
@@ -112,11 +112,12 @@ class Evaluator
 
     public function evalIdentifier($node): ObjInterface
     {
-        if(array_key_exists($node->value, $this->environment)) {
+        if (array_key_exists($node->value, $this->environment)) {
             $value = (string)$this->environment[$node->value];
 
-            if(!is_numeric($value))
+            if (!is_numeric($value)) {
                 throw new IncorrectEnvironmentException;
+            }
 
             return new NumberObj($value);
         }
@@ -275,8 +276,9 @@ class Evaluator
 
     public function evaluateDiv($leftVal, $rightVal)
     {
-        if(bccomp('0', $rightVal, $this->precision) == 0)
+        if (bccomp('0', $rightVal, $this->precision) == 0) {
             throw new DivisionByZeroException("Cannot divide $leftVal by $rightVal");
+        }
 
         return bcdiv($leftVal, $rightVal, $this->precision);
     }
