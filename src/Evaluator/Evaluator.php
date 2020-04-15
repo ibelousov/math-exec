@@ -44,15 +44,7 @@ class Evaluator
 
     public static function mathExec($expression, $inner_precision = 40)
     {
-        $value = (new self($expression, $inner_precision))->exec()->value;
-
-        $value = rtrim($value, '0');
-
-        if ($value[strlen($value)-1] == '.') {
-            return substr($value, 0, strlen($value)-1);
-        }
-
-        return $value;
+        return (new self($expression, $inner_precision))->exec();
     }
 
     public static function mathPrepare($expression, $inner_precision = 40)
@@ -60,11 +52,15 @@ class Evaluator
         return new self($expression, $inner_precision);
     }
 
-    public function exec($environment = [])
+    public function exec($environment = [], $precision = null)
     {
         $this->environment = $environment;
 
-        return $this->evalObj($this->program);
+        if(is_int($precision)) {
+            $this->precision = $precision;
+        }
+
+        return $this->evalObj($this->program)->value;
     }
 
     public function evalObj(NodeInterface $node): ObjInterface
@@ -223,10 +219,11 @@ class Evaluator
 
     public function evalIntegerInfixExpressioin($operator, $left, $right): ?ObjInterface
     {
-        $leftVal = $left->value;
+        $leftVal  = $left->value;
         $rightVal = $right->value;
 
         switch ($operator) {
+
             case '+':  return new NumberObj($this->evaluateAdd($leftVal, $rightVal));
             case '-':  return new NumberObj($this->evaluateSub($leftVal, $rightVal));
             case '*':  return new NumberObj($this->evaluateMul($leftVal, $rightVal));
@@ -241,6 +238,7 @@ class Evaluator
             case '>=': return new BooleanObj($this->evaluateGT($leftVal, $rightVal) || $this->evaluateEQ($leftVal, $rightVal));
             case '==': return new BooleanObj($this->evaluateEQ($leftVal, $rightVal));
             case '!=': return new BooleanObj($this->evaluateNEQ($leftVal, $rightVal));
+
         }
 
         throw new UnknownOperatorException($left->Type() . ' ' . $operator . ' ' . $right->Type());

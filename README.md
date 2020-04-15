@@ -6,11 +6,14 @@ MathExec is a php library for parsing and evaluating math expressions like this:
 echo Evaluator::mathExec("5 ^ 2 + 36 / 2 - 2 * 0.5");
 ```
 
+Or you could prepare an expression template and then execute it, with specified precision,
+when needed, by providing needed variables
+
 ```php
 $evaluator = Evaluator::mathPrepare("a + 5 / 3 * b - c");
 
-foreach([[1,2,3],[4,5,6],[7,8,9]] as $values) {
-    $evaluator->exec(['a' => $values[0], 'b' => $values[1], 'c' => $values[2]]);
+foreach([[1,2,3,4],[4,5,6,4],[7,8,9,0]] as $values) {
+    $evaluator->exec(['a' => $values[0], 'b' => $values[1], 'c' => $values[2]], $values[3]);
 }
 ```
 
@@ -97,37 +100,37 @@ by default it is 40 signs after point
 
 // Multiplication
 ```php
-Evaluator::mathExec("2 * 2"); 
+Evaluator::mathExec("2 * 2", 0); 
 //  "4"
 ```
 // Division
 ```php
-Evaluator::mathExec("2 / 2"); 
+Evaluator::mathExec("2 / 2", 0); 
 // "1"
 ```
 ```php
 // Power
-Evaluator::mathExec("2 ^ 3"); 
+Evaluator::mathExec("2 ^ 3", 0); 
 // "8" (left and right should be whole numbers)
 ```
 ```php
 // Modul
-Evaluator::mathExec("7 % 2"); 
+Evaluator::mathExec("7 % 2", 0); 
 // "1"
 ```
 ```php
 // Whole division
-Evaluator::mathExec("3.1415 // 2"); 
+Evaluator::mathExec("3.1415 // 2", 0); 
 // "1"
 ```
 ```php
 // Associativity
-Evaluator::mathExec("2 + 2 * 2");  
+Evaluator::mathExec("2 + 2 * 2", 0);  
 // "6"
 ```
 ```php
 // Parenthesis
-Evaluator::mathExec("(2 + 2) * 2"); 
+Evaluator::mathExec("(2 + 2) * 2", 0); 
 // "8"
 ```
 ```php
@@ -195,7 +198,7 @@ echo Evaluator::mathExec('inc(inc(2))',40);
 ### Inner representation of numbers
 For example if you call this
 ```php
-Evaluator::mathExec("4/4 == 6/5",0);
+Evaluator::mathExec("4/4 == 6/5", 0);
 ```    
 it evaluates to 1, because inner representation in this case is 0, and when you divide 6/5 you get 1 and not 1.2
 

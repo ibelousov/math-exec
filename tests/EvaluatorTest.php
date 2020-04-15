@@ -299,4 +299,16 @@ class EvaluatorTest extends TestCase
             $this->assertEquals((string)$item[2], $result);
         }
     }
+
+    /** @test */
+    public function prepare_and_evaluate_from_env_with_diff_precision()
+    {
+        $parsed = Evaluator::mathPrepare('\\a');
+
+        foreach([[2, 0, 1],[2, 1, 1.4],[2, 2, 1.41],[2, 3, 1.414]] as $item) {
+            $result = $parsed->exec(['a' => $item[0]], $item[1]);
+
+            $this->assertEquals((string)$item[2], $result);
+        }
+    }
 }
